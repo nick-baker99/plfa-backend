@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const router = mongoose.Router();
+const express = require('express');
+const router = express.Router();
 const registerController = require('../../controllers/registerController');
 
 router.post('/', registerController.createUser);

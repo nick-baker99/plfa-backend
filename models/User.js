@@ -26,18 +26,15 @@ const userSchema = new mongoose.Schema({
   roles: {
     User: {
       type: Number,
-      default: 1337
+      default: 1337,
     },
-    Moderator: {
-      type: Number,
-      default: 1964
-    },
-    Admin: {
-      type: Number,
-      default: 1999
-    }
+    Moderator: Number,
+    Admin: Number
   },
-  refreshToken: String
+  refreshToken: {
+    type: String,
+    default: ""
+  }
 });
 
 const User = mongoose.model('user', userSchema);
