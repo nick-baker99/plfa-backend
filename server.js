@@ -26,6 +26,7 @@ app.use(cookieParser());
 app.use('/register', require('./routes/users/register'));
 app.use('/login', require('./routes/users/auth'));
 app.use('/logout', require('./routes/users/logout'));
+app.use('/refresh', require('./routes/users/refreshToken'));
 
 // once connected to MongoDB start the server
 mongoose.connection.once('open', () => {

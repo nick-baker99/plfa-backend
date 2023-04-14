@@ -39,7 +39,6 @@ const createUser = async (req, res) => {
       {
         "UserInfo": {
           "email": email,
-          "firstName": firstName,
           "roles": roles
         },
       },
