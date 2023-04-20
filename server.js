@@ -6,11 +6,15 @@ const connectDB = require('./config/dbConn');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 const cookieParser = require('cookie-parser');
+const credentials = require('./middleware/credentials');
 
 // attempt to connect to MongoDB
 connectDB();
 
 const PORT = process.env.PORT || 3500;
+
+// credentials middleware
+app.use(credentials);
 
 // CORS
 app.use(cors(corsOptions));
@@ -24,7 +28,7 @@ app.use(cookieParser());
 
 // routes
 app.use('/register', require('./routes/users/register'));
-app.use('/login', require('./routes/users/auth'));
+app.use('/auth', require('./routes/users/auth'));
 app.use('/logout', require('./routes/users/logout'));
 app.use('/refresh', require('./routes/users/refreshToken'));
 
