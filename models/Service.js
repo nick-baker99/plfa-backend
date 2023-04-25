@@ -7,8 +7,14 @@ const serviceSchema = new mongoose.Schema({
     required: true
   },
   icon: {
-    type: String,
-    default: 'IoFootball'
+    prefix: {
+      type: String,
+      default: 'fa'
+    },
+    name: {
+      type: String,
+      default: 'futbol'
+    }
   },
   description: {
     type: String,
