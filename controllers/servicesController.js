@@ -1,9 +1,11 @@
 const { json } = require('express');
+const { set } = require('mongoose');
 const Service = require('../models/Service');
 
 const getAllServices = async (req, res) => {
   const services = await Service.find({});
   if (!services) return res.status(204).json({ 'message': 'No services found' });
+  
   res.json(services);
 };
 
