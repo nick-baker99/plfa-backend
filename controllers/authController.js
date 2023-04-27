@@ -39,11 +39,12 @@ const handleLogin = async (req, res) => {
     const result = await foundUser.save();
 
     const firstName = foundUser?.firstName;
+    const displayName = foundUser?.displayName;
 
     // create http only cookie to store JWT
     res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: true, maxAge: 24 * 60 * 60 * 1000 });
     // send access token
-    res.status(201).json({ userRoles, accessToken, firstName });
+    res.status(201).json({ userRoles, accessToken, firstName, displayName });
   } else {
     // send unauthorized status
     res.sendStatus(401);
