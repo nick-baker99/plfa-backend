@@ -7,7 +7,7 @@ const handleLogin = async (req, res) => {
 
   // check user exists with the email
   const foundUser = await User.findOne({ email: req.body.email }).exec();
-  if (!foundUser) return res.sendStatus(403);
+  if (!foundUser) return res.sendStatus(401);
   
   // check password match using bcrypt
   const pwdMatch = await bcrypt.compare(req.body.pwd, foundUser.password);
