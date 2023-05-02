@@ -10,7 +10,7 @@ const getAllServices = async (req, res) => {
 };
 
 const getService = async (req, res) => {
-  if (req?.params?.id) return res.status(400).json({ 'message': 'Service ID required' });
+  if (!req?.params?.id) return res.status(400).json({ 'message': 'Service ID required' });
   const service = await Service.findOne({ _id: req.params.id }).exec();
   if (!service) return res.status(204).json({ 'message': 'service not found' });
 

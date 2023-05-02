@@ -7,6 +7,7 @@ const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 const cookieParser = require('cookie-parser');
 const credentials = require('./middleware/credentials');
+const verifyJWT = require('./middleware/verifyJWT');
 
 // attempt to connect to MongoDB
 connectDB();
@@ -32,6 +33,10 @@ app.use('/register', require('./routes/users/register'));
 app.use('/auth', require('./routes/users/auth'));
 app.use('/logout', require('./routes/users/logout'));
 app.use('/refresh', require('./routes/users/refreshToken'));
+
+// restricted routes only accessible if user has a verified JWT
+app.use(verifyJWT);
+app.use('/users', require('./routes/users/users'));
 
 // SERVICES
 app.use('/services', require('./routes/services/services'));
