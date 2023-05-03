@@ -34,12 +34,12 @@ app.use('/auth', require('./routes/users/auth'));
 app.use('/logout', require('./routes/users/logout'));
 app.use('/refresh', require('./routes/users/refreshToken'));
 
+// SERVICES
+app.use('/services', require('./routes/services/services'));
+
 // restricted routes only accessible if user has a verified JWT
 app.use(verifyJWT);
 app.use('/users', require('./routes/users/users'));
-
-// SERVICES
-app.use('/services', require('./routes/services/services'));
 
 // once connected to MongoDB start the server
 mongoose.connection.once('open', () => {
