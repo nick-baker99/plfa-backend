@@ -59,7 +59,7 @@ const createUser = async (req, res) => {
     // create http only cookie to store JWT
     res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: true, maxAge: 24 * 60 * 60 * 1000 });
     // send access token
-    res.status(201).json({ roles, accessToken });
+    res.status(201).json({ roles, accessToken, firstName, displayName });
   } catch (err) {
     return res.status(500).json({ 'message': err.message });
   }

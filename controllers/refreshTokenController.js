@@ -10,6 +10,11 @@ const handleRefreshToken = async (req, res) => {
   const foundUser = await User.findOne({ refreshToken }).exec();
   // if no user found with this refresh token return forbidden status
   if (!foundUser) return res.sendStatus(403);
+
+  const email = foundUser.email;
+  const firstName = foundUser.firstName;
+  const displayName = foundUser?.displayName;
+
   // verify JWT
   jwt.verify(
     refreshToken,
@@ -29,7 +34,7 @@ const handleRefreshToken = async (req, res) => {
         { expiresIn: '30s' }
       );
       // send new access token
-      res.json({ roles, accessToken });
+      res.json({ roles, accessToken, email, firstName, displayName });
     }
   );
 }
