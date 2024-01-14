@@ -43,7 +43,7 @@ const createUser = async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '30s' }
+      { expiresIn: '15m' }
     );
     // refresh token
     const refreshToken = jwt.sign(
