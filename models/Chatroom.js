@@ -9,7 +9,9 @@ const chatroomSchema = mongoose.Schema({
   active: {
     type: Boolean,
     default: false
-  }
+  },
+  createdAt: Date,
+  updatedAt: Date
 });
 
 const Chatroom = mongoose.model('chatroom', chatroomSchema);

@@ -62,7 +62,7 @@ const deleteService = async (req, res) => {
   // delete service
   const result = await Service.deleteOne({ _id: req.body.id });
 
-  res.json(result);
+  res.status(200).json(result);
 }
 
 module.exports = { 
