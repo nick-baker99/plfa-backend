@@ -37,6 +37,7 @@ app.use('/refresh', require('./routes/users/refreshToken'));
 // SERVICES
 app.use('/services', require('./routes/services/services'));
 
+app.use('/messages', require('./routes/chatrooms/messages'));
 
 // restricted routes only accessible if user has a verified JWT
 app.use(verifyJWT);
