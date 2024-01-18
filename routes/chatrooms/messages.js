@@ -5,7 +5,8 @@ const verifyRoles = require('../../middleware/verifyRoles');
 const ROLES_LIST = require('../../config/roles_list');
 
 router.route('/')
-  .post(messagesController.createNewMessage);
+  .post(messagesController.createNewMessage)
+  .delete(messagesController.deleteMessage);
 
 router.route('/:id').get(messagesController.getChatroomMessages);
 

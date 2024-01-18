@@ -1,4 +1,5 @@
 const Message = require('../models/Message');
+const ROLES_LIST = require('../config/roles_list');
 
 const getChatroomMessages = async (req, res) => {
   if (!req?.params?.id) return res.status(400).json({ 'message': 'Chatroom ID required' });
@@ -31,6 +32,33 @@ const createNewMessage = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ 'message': err.message });
   }
-};
+}
 
-module.exports = { getChatroomMessages, createNewMessage };
+const deleteMessage = async (req, res) => {
+  if (!req.body) return res.status(400);
+
+  const { messageId, userId, roles } = req.body;
+
+  if (!messageId && (!userId || !roles)) return res.status(400).json({ 'message': 'Required info missing' });
+
+  try {
+    // check message exists
+    const message = await Message.findOne({ _id: messageId }).exec();
+
+    if (!message) return res.status(204).json({ 'message': `No message found with ID: ${messageId}` });
+
+    // only authorised to delete message if request user ID matches sender ID or if request user roles includes admin
+    if ((userId == message.userId) || (roles?.includes(ROLES_LIST.Admin))) {
+      // delete message
+      const result = await Message.deleteOne({ _id: messageId });
+
+      return res.status(200).json({ 'message': `Message ID: ${messageId} deleted` });
+    } else {
+      return res.status(403).json({ 'message': 'Not authorised to delete message' });
+    }
+  } catch (err) {
+    return res.status(500).json({ 'message': err.message });
+  }
+}
+
+module.exports = { getChatroomMessages, createNewMessage, deleteMessage };

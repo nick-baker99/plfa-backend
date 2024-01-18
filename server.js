@@ -37,14 +37,14 @@ app.use('/refresh', require('./routes/users/refreshToken'));
 // SERVICES
 app.use('/services', require('./routes/services/services'));
 
-app.use('/messages', require('./routes/chatrooms/messages'));
-
 // restricted routes only accessible if user has a verified JWT
 app.use(verifyJWT);
 // USERS
 app.use('/users', require('./routes/users/users'));
 // CHATROOMS
 app.use('/chatrooms', require('./routes/chatrooms/chatrooms'));
+// CHATROOM MESSAGES
+app.use('/messages', require('./routes/chatrooms/messages'));
 
 // once connected to MongoDB start the server
 mongoose.connection.once('open', () => {
