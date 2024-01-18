@@ -31,9 +31,17 @@ const userSchema = new mongoose.Schema({
     Moderator: Number,
     Admin: Number
   },
+  favouriteChatrooms: {
+    type: Array,
+    default: ["65a6f051c694897c9a9dbb95"]
+  },
   refreshToken: {
     type: String,
     default: ""
+  },
+  createdAt: {
+    type: Date,
+    default: new Date()
   }
 });
 
