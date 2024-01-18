@@ -43,7 +43,7 @@ const createChatroom = async (req, res) => {
 const updateChatroom = async (req, res) => {
   if (!req?.body) return res.status(400);
 
-  if (!req.body?.id) return res.status(204).json({ 'message': 'ID required' });
+  if (!req.body?.id) return res.status(400).json({ 'message': 'ID required' });
   // find chatroom using ID
   const chatroom = await Chatroom.findOne({ _id: req.body.id }).exec();
 
@@ -74,7 +74,7 @@ const updateChatroom = async (req, res) => {
 const deleteChatroom = async (req, res) => {
   if (!req?.body?.id) return res.status(400).json({ 'message': 'ID required' });
 
-  const chatroom = await Chatroom.find({ _id: req.body.id }).exec();
+  const chatroom = await Chatroom.findOne({ _id: req.body.id }).exec();
 
   if (!chatroom) return res.status(204).json({ 'message': `No chatroom found with ID: ${req.body.id}` });
 

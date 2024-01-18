@@ -14,8 +14,6 @@ const handleLogin = async (req, res) => {
   if (pwdMatch) {
     // get user roles values and filter out and boolean values
     const userRoles = Object.values(foundUser.roles).filter(Boolean);
-
-    console.log(userRoles);
     
     // create JWTs
     const accessToken = jwt.sign(
