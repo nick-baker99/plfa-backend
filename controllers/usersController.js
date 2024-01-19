@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
 // handlers to allow admins to view users in the DB
 
@@ -10,16 +11,34 @@ const getAllUsers = async (req, res) => {
   res.json(users);
 }
 
-// find a user using ID
-const getUser = async (req, res) => {
-  if (!req?.params?.id) return res.status(400).json({ 'message': 'User ID required' });
+// user can request their account details if signed in
+const getUserDetails = async (req, res) => {
+  // request requires a jwt to verify the user
+  if (!req?.cookies?.jwt) return res.sendStatus(401);
 
-  const user = await User.findOne({ _id: req.params.id }).exec();
-  if (!user) return res.status(204).json({ 'message': `No user found with ID ${req.params.id}` });
+  const refreshToken = req.cookies.jwt;
 
-  res.json(user);
+  try {
+      const foundUser = await User.findOne({ refreshToken }).exec();
+    // if user not found with this refresh token then send 403
+    if (!foundUser) return res.sendStatus(403);
+
+    // verify JWT
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      (err, decoded) => {
+        if (err || foundUser.email !== decoded.email) return res.sendStatus(400);
+
+        return res.status(200).json(foundUser);
+      }
+    );
+  } catch (err) {
+    return res.status(500).json({ 'message': err.message });
+  }
 }
 
 
 
-module.exports = { getAllUsers, getUser };
+
+module.exports = { getAllUsers, getUserDetails };
