@@ -15,6 +15,8 @@ const getChatroomMessages = async (req, res) => {
   }
 }
 
+const getMostChatMessage = async (req, res) => {}
+
 const createNewMessage = async (req, res) => {
   if (!req.body) return res.status(400);
   const { chatId, userId, text } = req.body;

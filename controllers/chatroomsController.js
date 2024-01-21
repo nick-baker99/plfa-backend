@@ -1,7 +1,7 @@
 const Chatroom = require('../models/Chatroom');
 
 const getAllChatrooms = async (req, res) => {
-  const chatrooms = await Chatroom.find({});
+  const chatrooms = await Chatroom.find({}).sort({ title: 1 }).exec();
 
   if (!chatrooms) return res.status(204).json({ 'message': 'No chatrooms' });
 
