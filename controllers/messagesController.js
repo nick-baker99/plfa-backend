@@ -5,7 +5,7 @@ const getChatroomMessages = async (req, res) => {
   if (!req?.params?.id) return res.status(400).json({ 'message': 'Chatroom ID required' });
 
   try {
-    const messages = await Message.find({ "chatroomId": req.params.id });
+    const messages = await Message.find({ "chatroomId": req.params.id }).sort({ createdAt: -1 }).exec();
 
     if (!messages) return res.status(204).json({ 'message': 'No messages were found' });
 
@@ -14,8 +14,20 @@ const getChatroomMessages = async (req, res) => {
     return res.status(500).json({ 'message': err.message });
   }
 }
+// return the most recent chat message sent to a specific chatroom  
+const getRecentChatMessage = async (req, res) => {
+  if (!req?.params?.id) return res.status(400).json({ 'message': 'Chatroom ID required' });
 
-const getMostChatMessage = async (req, res) => {}
+  try {
+    const mostRecent = await Message.findOne({ chatroomId: req.params.id }).sort({ createdAt: -1 }).exec();
+
+    if (!mostRecent) return res.status(204).json({ 'message': `No message found in chatroom ID: ${req.params.id}` });
+
+    return res.status(200).json(mostRecent);
+  } catch (err) {
+    return res.status(500).json({ 'message': err.message });
+  }
+}
 
 const createNewMessage = async (req, res) => {
   if (!req.body) return res.status(400);
@@ -63,4 +75,4 @@ const deleteMessage = async (req, res) => {
   }
 }
 
-module.exports = { getChatroomMessages, createNewMessage, deleteMessage };
+module.exports = { getChatroomMessages, createNewMessage, deleteMessage, getRecentChatMessage };

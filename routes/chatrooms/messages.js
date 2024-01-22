@@ -10,4 +10,6 @@ router.route('/')
 
 router.route('/:id').get(messagesController.getChatroomMessages);
 
+router.route('/recent/:id').get(messagesController.getRecentChatMessage);
+
 module.exports = router;
