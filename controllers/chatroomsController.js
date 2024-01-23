@@ -65,7 +65,7 @@ const updateChatroom = async (req, res) => {
   try {
     const result = await Chatroom.findOneAndUpdate(filter, update);
 
-    return res.status(200).json(result);
+    return res.status(200).json({ 'message': 'Chatroom updated' });
   } catch (err) {
     return res.status(500).json({ 'message': err.message });
   }
