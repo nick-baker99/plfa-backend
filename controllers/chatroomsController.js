@@ -1,21 +1,32 @@
 const Chatroom = require('../models/Chatroom');
 
 const getAllChatrooms = async (req, res) => {
-  const chatrooms = await Chatroom.find({}).sort({ title: 1 }).exec();
+  try {
+    const chatrooms = await Chatroom.find({}).sort({ title: 1 }).exec();
 
-  if (!chatrooms) return res.status(204).json({ 'message': 'No chatrooms' });
+    if (!chatrooms) return res.status(204).json({ 'message': 'No chatrooms' });
 
-  return res.json(chatrooms);
+    return res.json(chatrooms);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500);
+  }
 }
 
 const getChatroom = async (req, res) => {
   if (!req?.params?.id) return res.status(400).json({ 'message': 'ID required'});
 
-  const chatroom = await Chatroom.findOne({ _id: req.params.id }).exec();
+  try {
+    const chatroom = await Chatroom.findOne({ _id: req.params.id }).exec();
 
-  if (!chatroom) return res.status(204).json({ 'message': `No chatroom found with ID: ${req.params.id}` });
+    if (!chatroom) return res.status(204).json({ 'message': `No chatroom found with ID: ${req.params.id}` });
 
-  return res.json(chatroom);
+    return res.json(chatroom);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500);
+  }
+  
 }
 
 const createChatroom = async (req, res) => {
@@ -44,11 +55,17 @@ const updateChatroom = async (req, res) => {
   if (!req?.body) return res.status(400);
 
   if (!req.body?.id) return res.status(400).json({ 'message': 'ID required' });
-  // find chatroom using ID
-  const chatroom = await Chatroom.findOne({ _id: req.body.id }).exec();
 
-  // if chatroom not found return error
-  if (!chatroom) return res.status(204).json({ 'message': `No chatroom found with ID ${req.body.id}` });
+  try {
+    // find chatroom using ID
+    const chatroom = await Chatroom.findOne({ _id: req.body.id }).exec();
+
+    // if chatroom not found return error
+    if (!chatroom) return res.status(204).json({ 'message': `No chatroom found with ID ${req.body.id}` });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500);
+  }
 
   const filter = { _id: req.body.id };
   const update = {};
@@ -73,10 +90,15 @@ const updateChatroom = async (req, res) => {
 
 const deleteChatroom = async (req, res) => {
   if (!req?.body?.id) return res.status(400).json({ 'message': 'ID required' });
+  // check chatroom exists in DB before attempting to delete
+  try {
+    const chatroom = await Chatroom.findOne({ _id: req.body.id }).exec();
 
-  const chatroom = await Chatroom.findOne({ _id: req.body.id }).exec();
-
-  if (!chatroom) return res.status(204).json({ 'message': `No chatroom found with ID: ${req.body.id}` });
+    if (!chatroom) return res.status(204).json({ 'message': `No chatroom found with ID: ${req.body.id}` });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500);
+  }
 
   try {
     const result = await Chatroom.deleteOne({ _id: req.body.id });
