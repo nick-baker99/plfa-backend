@@ -1,4 +1,5 @@
 const Chatroom = require('../models/Chatroom');
+const mongoose = require('mongoose');
 
 const getAllChatrooms = async (req, res) => {
   try {
@@ -14,7 +15,11 @@ const getAllChatrooms = async (req, res) => {
 }
 
 const getChatroom = async (req, res) => {
-  if (!req?.params?.id) return res.status(400).json({ 'message': 'ID required'});
+  const id = req?.params?.id;
+
+  if (!id) return res.status(400).json({ 'message': 'ID required'});
+
+  if (!mongoose.isValidObjectId(id)) return res.status(400).json({ 'message': 'Invalid ID format' });
 
   try {
     const chatroom = await Chatroom.findOne({ _id: req.params.id }).exec();
@@ -25,8 +30,7 @@ const getChatroom = async (req, res) => {
   } catch (err) {
     console.log(err.message);
     return res.status(500);
-  }
-  
+  } 
 }
 
 const createChatroom = async (req, res) => {
@@ -52,22 +56,24 @@ const createChatroom = async (req, res) => {
 }
 
 const updateChatroom = async (req, res) => {
-  if (!req?.body) return res.status(400);
+  const { id } = req?.body;
 
-  if (!req.body?.id) return res.status(400).json({ 'message': 'ID required' });
+  if (!id) return res.status(400).json({ 'message': 'ID required' });
+
+  if (!mongoose.isValidObjectId(id)) return res.status(400).json({ 'message': 'Invalid ID format' });
 
   try {
     // find chatroom using ID
-    const chatroom = await Chatroom.findOne({ _id: req.body.id }).exec();
+    const chatroom = await Chatroom.findOne({ _id: id }).exec();
 
     // if chatroom not found return error
-    if (!chatroom) return res.status(204).json({ 'message': `No chatroom found with ID ${req.body.id}` });
+    if (!chatroom) return res.status(204).json({ 'message': `No chatroom found with ID ${id}` });
   } catch (err) {
     console.log(err.message);
     return res.status(500);
   }
 
-  const filter = { _id: req.body.id };
+  const filter = { _id: id };
   const update = {};
 
   if (req.body?.title) update.title = req.body.title;
