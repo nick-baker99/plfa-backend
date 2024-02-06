@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 const messageSchema = mongoose.Schema({
-  chatroomId: {
+  chatroom: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Chatroom',
     required: true
   },
-  userId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'user',
     required: true
   },
   message: {

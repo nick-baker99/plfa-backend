@@ -1,6 +1,7 @@
 const Message = require('../models/Message');
 const ROLES_LIST = require('../config/roles_list');
 const mongoose = require('mongoose');
+const User = require('../models/User');
 
 const getChatroomMessages = async (req, res) => {
   const id = req?.params?.id
@@ -9,12 +10,17 @@ const getChatroomMessages = async (req, res) => {
   if (!mongoose.isValidObjectId(id)) return res.status(400).json({ 'message': 'Invalid ID format' });
 
   try {
-    const messages = await Message.find({ "chatroomId": id }).sort({ createdAt: -1 }).exec();
+    const messages = await Message
+      .find({ "chatroom": id })
+      .populate('user')
+      .sort({ createdAt: -1 })
+      .exec();
 
     if (!messages) return res.status(204).json({ 'message': 'No messages were found' });
 
     return res.json(messages);
   } catch (err) {
+    console.log(err.message);
     return res.status(500).json({ 'message': err.message });
   }
 }
@@ -44,8 +50,8 @@ const createNewMessage = async (req, res) => {
 
   try {
     const newMessage = await Message.create({
-      chatroomId: chatId,
-      userId: userId,
+      chatroom: chatId,
+      user: userId,
       message: text,
     });
 
