@@ -52,8 +52,10 @@ const createNewMessage = async ({ chatId, userId, text }) => {
       user: userId,
       message: text,
     });
+    // populate message document to add sender account data
+    const populated = await Message.populate(newMessage, { path: 'user' });
 
-    return newMessage;
+    return populated;
   } catch (err) {
     console.error(err.message);
     throw new Error('Failed to create message');
