@@ -42,6 +42,25 @@ const getRecentChatMessage = async (req, res) => {
   }
 }
 
+// WebSocket approach
+const createNewMessage = async ({ chatId, userId, text }) => {
+  if (!chatId || !userId || !text) throw new Error('Chat ID, user ID and text are required');
+
+  try {
+    const newMessage = await Message.create({
+      chatroom: chatId,
+      user: userId,
+      message: text,
+    });
+
+    return newMessage;
+  } catch (err) {
+    console.error(err.message);
+    throw new Error('Failed to create message');
+  }
+}
+
+/* API approach
 const createNewMessage = async (req, res) => {
   if (!req.body) return res.status(400);
   const { chatId, userId, text } = req.body;
@@ -60,6 +79,7 @@ const createNewMessage = async (req, res) => {
     return res.status(500).json({ 'message': err.message });
   }
 }
+*/
 
 const deleteMessage = async (req, res) => {
   if (!req.body) return res.status(400);
@@ -86,6 +106,6 @@ const deleteMessage = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ 'message': err.message });
   }
-}
+} 
 
 module.exports = { getChatroomMessages, createNewMessage, deleteMessage, getRecentChatMessage };
