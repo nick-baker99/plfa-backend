@@ -49,7 +49,7 @@ const updateService = async (req, res) => {
   // save updates
   const result = await service.save();
 
-  res.json(result);
+  return res.json(result);
 }
 
 const deleteService = async (req, res) => {

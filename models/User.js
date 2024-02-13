@@ -39,7 +39,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  createdAt: Date
+  createdAt: Date,
+  updatedAt: Date
 });
 
 const User = mongoose.model('user', userSchema);
