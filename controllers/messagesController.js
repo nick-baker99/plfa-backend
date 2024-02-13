@@ -51,6 +51,7 @@ const createNewMessage = async ({ chatId, userId, text }) => {
       chatroom: chatId,
       user: userId,
       message: text,
+      createdAt: new Date()
     });
     // populate message document to add sender account data
     const populated = await Message.populate(newMessage, { path: 'user' });
