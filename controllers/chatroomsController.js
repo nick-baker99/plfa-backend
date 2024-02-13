@@ -42,11 +42,11 @@ const createChatroom = async (req, res) => {
 
   try {
     const newChatroom = await Chatroom.create({
-      "title": req.body.title,
-      "image": req.body.image,
-      "active": active,
-      "createdAt": new Date(),
-      "updatedAt": new Date()
+      title: req.body.title,
+      image: req.body.image,
+      active: active,
+      createdAt: new Date(),
+      updatedAt: new Date()
     });
 
     return res.status(201).json(newChatroom);

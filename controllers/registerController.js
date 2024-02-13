@@ -24,14 +24,15 @@ const createUser = async (req, res) => {
     const hashedPwd = await bcrypt.hash(pwd, 10);
 
     const newUser = await User.create({
-      "email": email,
-      "firstName": firstName,
-      "lastName": lastName,
-      "displayName": displayName,
-      "password": hashedPwd,
-      "country": country,
-      "teamID": teamID,
-      "roles": roles
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      displayName: displayName,
+      password: hashedPwd,
+      country: country,
+      teamID: teamID,
+      roles: roles,
+      createdAt: new Date()
     });
 
     // create access token with user info assigned
