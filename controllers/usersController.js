@@ -51,29 +51,36 @@ const updateUserDetails = async (req, res) => {
     if (!foundUser) return res.status(403);
 
     // verify JWT
-    jwt.verify(
+    const verify =  await jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
       (err, decoded) => {
-        if (err || foundUser.email !== decoded.email) return res.status(400);
-
-        let updates = {};
-
-        if (updateData?.firstName) updates.firstName = updateData.firstName;
-        if (updateData?.lastName) updates.lastName = updateData.lastName;
-        if (updateData?.displayName) updates.displayName = updateData.displayName;
-        if (updateData?.country) updates.country = updateData.country;
-        if (updateData?.teamId) updates.teamID = updateData.teamId;
-        if (updateData?.favChats) updates.favouriteChatrooms = updateData?.favChats;
-
+        if (err || foundUser.email !== decoded.email) return false;
+        return true;
       }
     );
-  } catch (err) {
 
+    if (!verify) return res.status(403);
+
+    if (updateData?.firstName) foundUser.firstName = updateData.firstName;
+    if (updateData?.lastName) foundUser.lastName = updateData.lastName;
+    if (updateData?.displayName) foundUser.displayName = updateData.displayName;
+    if (updateData?.country) foundUser.country = updateData.country;
+    if (updateData?.teamId) foundUser.teamID = updateData.teamId;
+    if (updateData?.favChats) foundUser.favouriteChatrooms = updateData?.favChats;
+
+    foundUser.updatedAt = new Date();
+
+    const saved = await foundUser.save();
+
+    return res.status(200).json(saved);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500);
   }
 }
 
 
 
 
-module.exports = { getAllUsers, getUserDetails };
+module.exports = { getAllUsers, getUserDetails, updateUserDetails };

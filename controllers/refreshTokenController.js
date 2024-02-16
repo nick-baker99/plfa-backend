@@ -33,7 +33,7 @@ const handleRefreshToken = async (req, res) => {
         { expiresIn: '15m' }
       );
       // send new access token
-      res.json({ roles, accessToken, email, firstName, displayName });
+      return { roles, accessToken, email, firstName, displayName };
     }
   );
 }
