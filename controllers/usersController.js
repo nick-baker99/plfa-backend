@@ -42,6 +42,7 @@ const updateUserDetails = async (req, res) => {
   // request requires a jwt to verify the user
   if (!refreshToken) return res.status(401);
 
+  console.log(req?.body);
   const updateData = req?.body;
   if (!updateData) return res.status(400);
 
@@ -51,7 +52,7 @@ const updateUserDetails = async (req, res) => {
     if (!foundUser) return res.status(403);
 
     // verify JWT
-    const verify =  await jwt.verify(
+    const verify =  jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
       (err, decoded) => {
